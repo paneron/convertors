@@ -7,6 +7,7 @@ import type {
 import type { Predicate } from '@riboseinc/paneron-registry-kit/proposals/objectChangeset.js';
 import type { CommonGRItemData } from '@riboseinc/paneron-extension-geodetic-registry/classes/common.js';
 import type { Extent } from '@riboseinc/paneron-extension-geodetic-registry/classes/extent.js';
+import type { EllipsoidData } from '@riboseinc/paneron-extension-geodetic-registry/classes/ellipsoid.js';
 import type { DatumData, GeodeticDatumData } from '@riboseinc/paneron-extension-geodetic-registry/classes/datum.js';
 import type { TransformationParameter, TransformationData } from '@riboseinc/paneron-extension-geodetic-registry/classes/transformation.js';
 import type { ConversionParameter, ConversionData } from '@riboseinc/paneron-extension-geodetic-registry/classes/conversion.js';
@@ -81,6 +82,8 @@ export const Sheets = {
   UOM: 'UoM(UM#)',
 
   DATUMS: 'Datum(CD#)',
+
+  ELLIPSOIDS: 'Ellips(EL#)',
 } as const;
 type SheetName = typeof Sheets[keyof typeof Sheets];
 function isSheetName(val: string): val is SheetName {
@@ -712,6 +715,37 @@ const SupportedSheets = {
         item.formula = formula;
       }
       return item;
+    },
+  }),
+  [Sheets.ELLIPSOIDS]: makeItemProcessor({
+    fields: ['remarks', 'semiMajorAxis', 'globalUoM', 'isSphere', 'inverseFlattening', 'semiMinorAxis', 'informationSources'],
+    getClassID: () => 'ellipsoid',
+    toRegisterItem: function parseEllipsoid(item, resolveRelated, resolveReference) {
+      const uom = resolveReference(item.globalUoM, 'id') as string | Predicate | null;
+      if (uom === null) {
+        throw new Error("Unit of measure cannot be null");
+      }
+      console.info({ uom });
+      const isSphereString = item.isSphere.toLowerCase();
+      const isSphere = isSphereString === 'false'
+        ? false
+        : isSphereString === 'TRUE'
+          ? true
+          : undefined;
+      if (isSphere === undefined) {
+        throw new Error(`isSphere is not correctly defined: ${item.isSphere}`);
+      }
+      const d: Omit<UsePredicates<EllipsoidData, 'semiMajorAxisUoM' | 'semiMinorAxisUoM' | 'inverseFlatteningUoM'>, keyof CommonGRItemData> = {
+        semiMajorAxisUoM: uom,
+        semiMinorAxisUoM: uom,
+        inverseFlatteningUoM: uom,
+
+        semiMajorAxis: parseFloat(item.semiMajorAxis),
+        semiMinorAxis: parseFloat(item.semiMinorAxis),
+        inverseFlattening: parseFloat(item.inverseFlattening),
+        isSphere,
+      };
+      return d;
     },
   }),
   [Sheets.DATUMS]: makeItemProcessor({
