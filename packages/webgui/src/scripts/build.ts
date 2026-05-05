@@ -316,8 +316,14 @@ function isCLI(): boolean {
     const pathPassedToNode = process.argv[1]
       ? resolve(process.argv[1])
       : undefined;
+    const pathPassedNormalized = pathPassedToNode
+      ? pathPassedToNode.endsWith('-')
+        ? pathPassedToNode.slice(0, pathPassedToNode.length - 1)
+        : pathPassedToNode
+      : undefined;
+    console.debug({ pathPassedToNode, pathPassedNormalized, pathToThisFile })
     return (pathPassedToNode
-      ? pathToThisFile.includes(pathPassedToNode)
+      ? pathToThisFile.includes(pathPassedNormalized)
       : false);
   } else {
     // Check if Node is reading from stdin
