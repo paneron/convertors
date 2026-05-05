@@ -2,7 +2,7 @@
   "name": "@riboseinc/glossarist-adapter-cli",
   "version": "0.0.1",
   "license": "MIT",
-  "packageManager": "yarn@3.6.1",
+  "packageManager": "yarn@4.14.1",
   "dependencies": {
     "@riboseinc/glossarist-x3duom": "workspace:~",
     "cmd-ts": "^0.12.1"

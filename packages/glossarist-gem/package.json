@@ -3,7 +3,7 @@
   "description": "Converts faux-glossarist YAML to recognized glossarist YAML",
   "version": "0.0.1",
   "license": "MIT",
-  "packageManager": "yarn@3.6.1",
+  "packageManager": "yarn@4.14.1",
   "homepage": "https://github.com/glossarist/migration-adapters/tree/main/packages/x3duom",
   "main": "src/index.ts",
   "type": "module",

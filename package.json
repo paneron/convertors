@@ -1,6 +1,6 @@
 {
   "name": "migration-adapters",
-  "packageManager": "yarn@3.6.1",
+  "packageManager": "yarn@4.14.1",
   "devDependencies": {
     "esbuild": "~0.18",
     "typescript": "~5.1",
