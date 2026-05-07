@@ -831,8 +831,8 @@ const SupportedSheets = {
     },
   }),
   [Sheets.CITATIONS]: makeProcessor({
-    fields: ['title', 'alternateTitles', 'author', 'publisher', 'publicationDate', 'revisionDate', 'edition', 'editionDate', 'seriesName', 'seriesIssueID', 'seriesPage', 'otherDetails', 'uri'],
-    toItem: function parseCitation ({ title, publicationDate, revisionDate, edition, author, publisher, otherDetails, seriesName, seriesIssueID, seriesPage, uri }) {
+    fields: ['title', 'alternateTitles', 'author', 'publisher', 'publicationDate', 'revisionDate', 'edition', 'editionDate', 'seriesName', 'seriesIssueID', 'seriesPage', 'doi', 'otherDetails', 'uri'],
+    toItem: function parseCitation ({ title, publicationDate, doi, revisionDate, edition, author, publisher, otherDetails, seriesName, seriesIssueID, seriesPage, uri }) {
       return {
         // XXX
         title,
@@ -845,6 +845,7 @@ const SupportedSheets = {
         seriesPage,
         otherDetails,
         uri,
+        doi,
         //alternateTitles: item.alternateTitles.split(';').map(t => t.trim()),
         publisher,
       };
